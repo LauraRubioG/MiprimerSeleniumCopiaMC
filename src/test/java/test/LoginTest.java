@@ -74,12 +74,12 @@ public class LoginTest {
 
     }
     @Test
-    void loginCorrect() throws InterruptedException {
+    void loginCorrect2() throws InterruptedException {
         loginPage.login("standard_user", "secret_sauce");
         assertTrue(driver.getCurrentUrl().contains("inventory"), "No se redirigió a la página de inventario");
     }
     @Test
-    void loginIncorrect() throws InterruptedException {
+    void loginIncorrect2() throws InterruptedException {
             loginPage.login("usuario_incorrect", "password_incorrect");
         assertFalse(driver.getCurrentUrl().contains("inventory"));
     }
