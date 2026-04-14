@@ -73,11 +73,13 @@ public class LoginTest {
         assertFalse(urlActual.contains("inventory"), "El login fue exitoso a pesar de usar datos incorrectos");
 
     }
+    //Test correcto de la nueva accion
     @Test
     void loginCorrect2() throws InterruptedException {
         loginPage.login("standard_user", "secret_sauce");
         assertTrue(driver.getCurrentUrl().contains("inventory"), "No se redirigió a la página de inventario");
     }
+    //Test incorrecto de la nueva accion
     @Test
     void loginIncorrect2() throws InterruptedException {
             loginPage.login("usuario_incorrect", "password_incorrect");
