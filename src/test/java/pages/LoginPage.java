@@ -4,23 +4,35 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class LoginPage {
+
     private WebDriver driver;
 
-    // Localizadores
     private By userField = By.id("user-name");
     private By passField = By.id("password");
     private By loginBtn = By.id("login-button");
-    private By errorMessage = By.cssSelector("[data-test='error']");
 
-    // Constructor
+    private By errorMsg = By.cssSelector("h3[data-test='error']");
+
+    public String obtenerMensajeError() {
+        // Devuelve el texto del error para poder validarlo
+        return driver.findElement(errorMsg).getText();
+    }
+
+    public boolean esVisibleElError() {
+        // Devuelve true si el mensaje está desplegado
+        return driver.findElement(errorMsg).isDisplayed();
+    }
+
     public LoginPage(WebDriver driver) {
         this.driver = driver;
     }
 
-    // Acciones
-    public void ingresarCredenciales(String user, String pass) {
+    public void ingresarUsuario(String user) {
         driver.findElement(userField).clear();
         driver.findElement(userField).sendKeys(user);
+    }
+
+    public void ingresarPassword(String pass) {
         driver.findElement(passField).clear();
         driver.findElement(passField).sendKeys(pass);
     }
@@ -29,28 +41,14 @@ public class LoginPage {
         driver.findElement(loginBtn).click();
     }
 
-    public void login(String user, String pass) {
-        ingresarCredenciales(user, pass);
-        clickLogin();
-    }
-
-    // Verificaciones
-    public String obtenerTituloPagina() {
-        return driver.getTitle();
-    }
-
-    public String obtenerUrlActual() {
-        return driver.getCurrentUrl();
-    }
-
-    public boolean errorVisible() {
-        return !driver.findElements(errorMessage).isEmpty();
-    }
-
-    public String obtenerTextoError() {
-        if (errorVisible()) {
-            return driver.findElement(errorMessage).getText();
-        }
-        return "";
+    public void login(String usuario, String password) throws InterruptedException {
+        driver.findElement(userField).clear();
+        driver.findElement(userField).sendKeys(usuario);
+        Thread.sleep(2000);
+        driver.findElement(passField).clear();
+        driver.findElement(passField).sendKeys(password);
+        Thread.sleep(2000);
+        driver.findElement(loginBtn).click();
+        Thread.sleep(2000);
     }
 }

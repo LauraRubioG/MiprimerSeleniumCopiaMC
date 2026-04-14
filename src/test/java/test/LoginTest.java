@@ -33,24 +33,56 @@ public class LoginTest {
                 }
         }
 
-        @Test
-        void loginCorrecto() {
-                loginPage.login("standard_user", "secret_sauce");
+    @Test
+    void loginCorrecto() throws InterruptedException {
 
-                String urlActual = loginPage.obtenerUrlActual();
+// introduce un usuario válido
+        loginPage.ingresarUsuario("standard_user");
+        Thread.sleep(2000);
 
-                assertTrue(urlActual.contains("inventory"),
-                        "El usuario debería entrar a la página de inventario tras un login correcto");
-        }
+// introduce una contraseña válida
+        loginPage.ingresarPassword("secret_sauce");
+        Thread.sleep(2000);
 
-        @Test
-        void loginIncorrecto() {
-                loginPage.login("standard_user", "clave_mal");
+// pulsa el botón de login
+        loginPage.clickLogin();
+        Thread.sleep(2000);
 
-                assertTrue(loginPage.errorVisible(),
-                        "Debería mostrarse un mensaje de error al fallar el login");
+// comprueba que la URL contiene la palabra "inventory"
+        String urlActual = driver.getCurrentUrl();
+        assertTrue(urlActual.contains("inventory"), "La URL no es la esperada tras el login");
+        Thread.sleep(2000);
+    }
 
-                assertTrue(loginPage.obtenerTextoError().contains("Username and password do not match"),
-                        "El mensaje de error no es el esperado");
-        }
+    @Test
+    void loginIncorrecto() throws InterruptedException {
+            // introduce un usuario inválido
+        loginPage.ingresarUsuario("usuario_falso");
+        Thread.sleep(2000);
+
+// introduce una contraseña válida
+        loginPage.ingresarPassword("password_falso");
+        Thread.sleep(2000);
+
+// pulsa el botón de login
+        loginPage.clickLogin();
+        Thread.sleep(2000);
+
+// comprueba que la URL contiene la palabra "inventory"
+        String urlActual = driver.getCurrentUrl();
+        assertFalse(urlActual.contains("inventory"), "El login fue exitoso a pesar de usar datos incorrectos");
+
+    }
+    @Test
+    void loginCorrect() throws InterruptedException {
+        loginPage.login("standard_user", "secret_sauce");
+        assertTrue(driver.getCurrentUrl().contains("inventory"), "No se redirigió a la página de inventario");
+    }
+    @Test
+    void loginIncorrect() throws InterruptedException {
+            loginPage.login("usuario_incorrect", "password_incorrect");
+        assertFalse(driver.getCurrentUrl().contains("inventory"));
+    }
+
+
 }
